@@ -75,38 +75,3 @@ npm run dev
 ```bash
 npm run build
 ```
-
-## 📁 Project Structure
-
-FetchTest/
-├── node_modules/              # Project dependencies
-├── public/                   # Static assets
-│   └── vite.svg             # Vite logo
-├── src/                     # Source code
-│   ├── context/            # React context providers
-│   │   ├── AuthContext.jsx        # Authentication context provider
-│   │   └── FavoritesContext.jsx   # Favorites management context
-│   ├── pages/             # Page components
-│   │   ├── DogCard.jsx          # Reusable dog card component
-│   │   ├── DogDetails.jsx       # Individual dog details page
-│   │   ├── Favorites.jsx        # Favorites page
-│   │   ├── Footer.jsx          # Footer component
-│   │   ├── HomePage.jsx        # Landing page
-│   │   ├── Login.jsx          # Authentication page
-│   │   ├── MatchedDogs.jsx     # Matched dogs display
-│   │   ├── Navigation.jsx      # Navigation bar
-│   │   ├── Search.jsx         # Dog search page
-│   │   └── Testimonial.jsx     # User testimonials component
-│   ├── routes/            # Routing utilities
-│   │   └── ProtectedRoute.jsx   # Route protection logic
-│   ├── App.css            # Application-specific styles
-│   ├── App.jsx            # Main application component
-│   ├── index.css          # Global styles
-│   └── main.jsx           # Application entry point
-├── .gitignore             # Git ignore configuration
-├── eslint.config.js       # ESLint configuration
-├── index.html             # HTML entry point
-├── package-lock.json      # Dependency lock file
-├── package.json           # Project configuration and dependencies
-├── README.md              # Project documentation
-└── vite.config.js         # Vite configuration
