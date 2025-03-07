@@ -85,3 +85,45 @@ VITE_API_BASE_URL=https://frontend-take-home-service.fetch.com
 ```
 
 ## 📁 Project Structure
+
+#### `/src`
+- **context/**: Contains React context providers for global state management
+  - `AuthContext.jsx`: Manages user authentication state
+  - `FavoritesContext.jsx`: Handles favorite dogs and matches
+
+- **pages/**: Contains all page components
+  - `DogCard.jsx`: Reusable component for displaying dog information
+  - `DogDetails.jsx`: Detailed view of individual dogs
+  - `Favorites.jsx`: Displays user's favorite dogs
+  - `HomePage.jsx`: Landing page with main features
+  - `Login.jsx`: User authentication interface
+  - `MatchedDogs.jsx`: Shows matched dogs
+  - `Navigation.jsx`: Site-wide navigation component
+  - `Search.jsx`: Search interface with filters
+  - `Testimonial.jsx`: User testimonials display
+
+- **routes/**: Routing configuration
+  - `ProtectedRoute.jsx`: Authentication route protection
+
+#### Root Files
+- `vite.config.js`: Vite build tool configuration
+- `package.json`: Project dependencies and scripts
+- `eslint.config.js`: ESLint code style configuration
+- `index.html`: Main HTML template
+- `.gitignore`: Git ignore patterns
+
+### File Purposes
+
+#### Configuration Files
+- **package.json**: Defines project dependencies, scripts, and metadata
+- **vite.config.js**: Configures the Vite development server and build process
+- **eslint.config.js**: Maintains code quality and consistency
+
+#### Entry Points
+- **index.html**: The main HTML file that loads the React application
+- **src/main.jsx**: The JavaScript entry point that renders the React app
+- **src/App.jsx**: The root React component
+
+#### Styling
+- **src/index.css**: Global styles and Tailwind CSS imports
+- **src/App.css**: Application-specific styles
