@@ -40,49 +40,10 @@ const Search = () => {
     return [...new Set(cities)].sort();
   };
 
-  const getCachedData = (key) => {
-    try {
-      const cached = localStorage.getItem(key);
-      if (cached) {
-        const { data, timestamp } = JSON.parse(cached);
-        // Check if cache is less than 24 hours old
-        if (Date.now() - timestamp < 24 * 60 * 60 * 1000) {
-          return data;
-        }
-      }
-      return null;
-    } catch (error) {
-      console.warn(`Error reading ${key} from cache:`, error);
-      return null;
-    }
-  };
-
-  const setCachedData = (key, data) => {
-    try {
-      localStorage.setItem(
-        key,
-        JSON.stringify({
-          data,
-          timestamp: Date.now()
-        })
-      );
-    } catch (error) {
-      console.warn(`Error caching ${key}:`, error);
-    }
-  };
-
   const fetchBreeds = async () => {
     setLoading(true);
     setError(null);
     try {
-      // Check cache first
-      const cachedBreeds = getCachedData('breeds');
-      if (cachedBreeds) {
-        setBreeds(cachedBreeds);
-        setLoading(false);
-        return;
-      }
-
       const response = await axios.get(
         "https://frontend-take-home-service.fetch.com/dogs/breeds",
         { withCredentials: true }
@@ -91,16 +52,9 @@ const Search = () => {
         throw new Error("No breeds returned from the API.");
       }
       setBreeds(response.data);
-      setCachedData('breeds', response.data);
     } catch (error) {
       console.error("Error fetching breeds:", error);
-      // Use cached data as fallback if available
-      const cachedBreeds = getCachedData('breeds');
-      if (cachedBreeds) {
-        setBreeds(cachedBreeds);
-      } else {
-        setError("Failed to load breeds. Please try again.");
-      }
+      setError("Failed to load breeds. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -110,14 +64,6 @@ const Search = () => {
     setLoading(true);
     setError(null);
     try {
-      // Check cache first
-      const cachedCities = getCachedData('cities');
-      if (cachedCities) {
-        setUniqueCities(cachedCities);
-        setLoading(false);
-        return;
-      }
-
       const response = await axios.post(
         "https://frontend-take-home-service.fetch.com/locations/search",
         { size: 1000 },
@@ -128,15 +74,9 @@ const Search = () => {
       }
       const uniqueCitiesList = getUniqueCities(response.data.results);
       setUniqueCities(uniqueCitiesList);
-      setCachedData('cities', uniqueCitiesList);
     } catch (error) {
       console.error("Error fetching cities:", error);
-      // Use cached data as fallback if available
-      const cachedCities = getCachedData('cities');
-      if (cachedCities) {
-        setUniqueCities(cachedCities);
-      }
-      // Don't set error for cities - allow the app to continue
+      setError("Failed to load cities. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -146,18 +86,9 @@ const Search = () => {
     setLoading(true);
     setError(null);
     try {
-      // Check cache first
-      const cacheKey = `locations-${city || 'all'}`;
-      const cachedLocations = getCachedData(cacheKey);
-      if (cachedLocations) {
-        setLocations(cachedLocations);
-        setLoading(false);
-        return;
-      }
-
-      const payload = { size: 1000 };
+      const payload = { size: 1000 }; // Set size to 1000 by default
       if (city) {
-        payload.city = city;
+        payload.city = city; // Add city filter if provided
       }
       const response = await axios.post(
         "https://frontend-take-home-service.fetch.com/locations/search",
@@ -168,17 +99,10 @@ const Search = () => {
         throw new Error("No locations returned from the API.");
       }
       setLocations(response.data.results);
-      setCachedData(cacheKey, response.data.results);
       setLocationFilter(""); // Reset zip code filter when city changes
     } catch (error) {
       console.error("Error fetching locations:", error);
-      // Use cached data as fallback if available
-      const cacheKey = `locations-${city || 'all'}`;
-      const cachedLocations = getCachedData(cacheKey);
-      if (cachedLocations) {
-        setLocations(cachedLocations);
-      }
-      // Don't set error for locations - allow the app to continue
+      setError("Failed to load locations. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -226,9 +150,7 @@ const Search = () => {
       setDogs(filteredDogs);
     } catch (error) {
       console.error("Error fetching dogs:", error);
-      setError("Unable to fetch dogs at the moment. Please try adjusting your filters or try again later.");
-      setDogs([]); // Clear dogs list on error
-      setTotalDogs(0);
+      setError(error.message || "Failed to load dogs. Please try again.");
     } finally {
       setLoading(false);
     }
